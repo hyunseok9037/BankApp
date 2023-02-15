@@ -1,13 +1,12 @@
 package shop.mtcoding.bankapp.handler;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import shop.mtcoding.bankapp.handler.ex.CustomException;
 
 @RestControllerAdvice
-public class MyExceptionHanlder {
+public class MyExceptionHandler {
 
     // 자바스크립트를 응답 오류터지면 무조건 뒤로 가기다.
     @ExceptionHandler(CustomException.class)
