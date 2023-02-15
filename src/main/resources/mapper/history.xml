@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shop.mtcoding.bankapp.model.HistoryRepository">
+     <select id="findAll" resultType="shop.mtcoding.bankapp.model.history.History">
+        select * from history_tb
+    </select>
+
+    <select id="findById" resultType="shop.mtcoding.bankapp.model.history.History">
+        select * from history_tb where id = #{id}
+    </select>   
+
+    <insert id="insert">
+        insert into history_tb (amount, w_blanace, d_balance,w_accountId,d_accountId created_at) values(#{amount}, #{wBlanace}, #{dBalance},#{wAccountId},#{dAccountId} now())
+    </insert>    
+
+    <delete id="deleteById" >
+        delete from history_tb where id = #{id} 
+    </delete>    
+
+    <update id="updateById" >
+        update history_tb set amount= #{amount}, w_blanace= #{wBlanace}, d_balance= #{dBalance},w_AccountId= #{wAccountId},d_accountId= #{dAccountId} where id = #{id} 
+    </update>    
+
+</mapper>

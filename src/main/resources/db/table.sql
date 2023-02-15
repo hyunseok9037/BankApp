@@ -18,8 +18,7 @@ CREATE TABLE history_tb(
     amount bigint not null, 
     w_balance bigint,
     d_balance bigint,
-    w_account int, 
-    d_account int, 
+    w_account_id int, 
+    d_account_id int,
     created_at timestamp not null
 );
-
