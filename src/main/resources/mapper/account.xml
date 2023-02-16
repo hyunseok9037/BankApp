@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="shop.mtcoding.bankapp.model.AccountRepository">
+<mapper namespace="shop.mtcoding.bankapp.model.account.AccountRepository">
      <select id="findAll" resultType="shop.mtcoding.bankapp.model.account.Account">
         select * from account_tb
     </select>
@@ -13,7 +13,7 @@
     </select>   
 
     <insert id="insert">
-        insert into account_tb (number, password, balance,user_Id, created_at) values(#{number}, #{password}, #{balance},#{userId} now())
+        insert into account_tb (number, password, balance, user_id, created_at) values(#{number}, #{password}, #{balance}, #{userId}, now())
     </insert>    
 
     <delete id="deleteById" >
@@ -21,7 +21,7 @@
     </delete>    
 
     <update id="updateById" >
-        update account_tb set number= #{number}, password= #{password}, balance= #{balance}, user_Id=#{userId} where id = #{id} 
+        update account_tb set number= #{number}, password= #{password}, balance= #{balance}, user_id= #{userId} where id = #{id} 
     </update>    
 
 </mapper>
