@@ -11,14 +11,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import shop.mtcoding.bankapp.dto.account.AccountDepositReqDto;
+import shop.mtcoding.bankapp.dto.account.AccountDetailRespDto;
 import shop.mtcoding.bankapp.dto.account.AccountSaveReqDto;
 import shop.mtcoding.bankapp.dto.account.AccountTransferReqDto;
 import shop.mtcoding.bankapp.dto.account.AccountWithdrawReqDto;
+import shop.mtcoding.bankapp.dto.history.HistoryRespDto;
 import shop.mtcoding.bankapp.handler.ex.CustomException;
 import shop.mtcoding.bankapp.model.account.Account;
 import shop.mtcoding.bankapp.model.account.AccountRepository;
+import shop.mtcoding.bankapp.model.history.HistoryRepository;
 import shop.mtcoding.bankapp.model.user.User;
 import shop.mtcoding.bankapp.service.AccountService;
 
@@ -33,6 +37,9 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private HistoryRepository historyRepository;
 
     @PostMapping("/account/transfer")
     public String transfer(AccountTransferReqDto accountTransferReqDto) {
@@ -142,8 +149,24 @@ public class AccountController {
     }
 
     @GetMapping("/account/{id}")
-    public String detail(@PathVariable int id) {
+    public String detail(@PathVariable int id,
+            @RequestParam(name = "gubun", defaultValue = "all") String gubun, Model model) {
+        // 1. 인증체크
+        User principal = (User) session.getAttribute("principal");
+        if (principal == null) {
+            return "redirect:/loginForm";
+        }
+        // 2.히스토리레포지토리 호출(메서드 3개, or 마이바티스 동적쿼리로 처리하는 방법)
+        AccountDetailRespDto aDto = accountRepository.findByIdWithUser(id);
+        if (aDto.getUserId() != principal.getId()) {
+            throw new CustomException("해당 계좌를 볼 수 있는 권한이 없습니다",
+                    HttpStatus.FORBIDDEN);
+        }
+        List<HistoryRespDto> hDtoList = historyRepository.findByGubun(gubun, id);
+        model.addAttribute("aDto", aDto);
+        model.addAttribute("hDtoList", hDtoList);
         return "account/detail";
+
     }
 
     @GetMapping("/account/saveForm")
